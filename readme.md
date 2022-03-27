@@ -1,1 +1,1 @@
-npx jest <filename>
+npx jest `filename`
