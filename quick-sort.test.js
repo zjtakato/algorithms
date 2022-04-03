@@ -1,3 +1,7 @@
+
+// [1,9,5]
+// [1,8,4,5]
+
 function quickSort(nums) {
   // base case
   if (nums.length <= 1) return nums;
