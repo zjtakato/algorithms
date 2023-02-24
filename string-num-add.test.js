@@ -1,37 +1,30 @@
-function stringNumberAdd(string1, string2) {
+function add(a, b) {
   let result = [];
-  const stringArray1 = Array.from(string1).reverse();
-  const stringArray2 = Array.from(string2).reverse();
-  const loopArr = stringArray1.length >= stringArray2.length ? stringArray1 : stringArray2;
-  const minorArr = loopArr === stringArray1 ? stringArray2 : stringArray1;
+  a = Array.from(a);
+  b = Array.from(b);
+  const longArray = a.length >= b.length ? a : b;
+  const shortArray = a.length < b.length ? a : b;
   let carry = 0;
-  for (let index = 0; index < loopArr.length; index++) {
-    const num1 = parseInt(loopArr[index] || 0);
-    const num2 = parseInt(minorArr[index] || 0);
-    const addResult = num1 + num2 + carry;
-    if (addResult >= 10) {
-      result.push((addResult % 10).toString());
-      carry = 1;
-    } else {
-      result.push(addResult.toString());
-      carry = 0;
-    }
-    if (index === loopArr.length - 1 && carry > 0) {
-      result.push(carry.toString());
-    }
-    if (index > minorArr.length && carry === 0) {
-      result = result.concat(loopArr.slice(index + 1, loopArr.length));
-      break;
-    }
+  while (shortArray.length) {
+    const addResult = parseInt(shortArray.pop()) + parseInt(longArray.pop()) + carry;
+    const remainder = addResult % 10;
+    carry = addResult >= 10 ? 1 : 0;
+    result.push(remainder);
   }
-
+  while (longArray.length) {
+    if (carry === 0) break;
+    const addResult = parseInt(longArray.pop()) + carry;
+    const remainder = addResult % 10;
+    carry = addResult >= 10 ? 1 : 0;
+    result.push(remainder);
+  }
+  result = result.concat(longArray.reverse());
+  carry > 0 && result.push(carry);
   return result.reverse().join('');
 }
 
-test('stringNumberAdd', () => {
-  expect(stringNumberAdd('99', '99')).toEqual('198');
-  expect(stringNumberAdd('11199', '9')).toEqual('11208');
-})
-
-
-
+test('add', () => {
+  expect(add('2', '1')).toEqual('3');
+  expect(add('99', '99')).toEqual('198');
+  expect(add('11199', '9')).toEqual('11208');
+});
